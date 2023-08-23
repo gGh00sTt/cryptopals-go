@@ -21,6 +21,8 @@ func main() {
 		challenges.Challenge2()
 	case "3":
 		challenges.Challenge3()
+	case "4":
+		challenges.Challenge4()
 	default:
 		fmt.Println("Invalid challenge number")
 	}
