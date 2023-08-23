@@ -14,9 +14,7 @@ func Challenge3() {
 		panic(err)
 	}
 
-	englishLetters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-	freqorder := "etaoinshrdlcumwfgypbvkjxqz"
+	freqorder := " etaoinshrdlcumwfgypbvkjxqz"
 	freqorderrev := ""
 	for i := len(freqorder) - 1; i >= 0; i-- {
 		freqorderrev += string(freqorder[i])
@@ -24,20 +22,20 @@ func Challenge3() {
 
 	score := 0
 	finalbyte := make([]byte, len(convbyte))
-	xorcharacter := ""
+	xorcharacter := byte(0)
 
-	for _, char := range englishLetters {
+	for char := byte(0); char < 255; char++ {
 		newbyte := make([]byte, len(convbyte))
 		for i := 0; i < len(convbyte); i++ {
-			newbyte[i] = convbyte[i] ^ byte(char)
+			newbyte[i] = convbyte[i] ^ char
 		}
 
 		newscore := 0
 
 		for _, char := range newbyte {
-			if char > 64 && char < 127 || char > 96 && char < 123 {
+			if char > 0 && char < 255 {
 
-				position := strings.Index(freqorderrev, strings.ToLower(string(char)))
+				position := strings.Index(freqorderrev, string(char))
 				newscore += position
 			}
 		}
@@ -45,11 +43,11 @@ func Challenge3() {
 		if newscore >= score {
 			score = newscore
 			finalbyte = newbyte
-			xorcharacter = string(char)
+			xorcharacter = char
 		}
 	}
 
 	fmt.Println("Decrypted String : ", string(finalbyte))
-	fmt.Println("Xored Character : ", xorcharacter)
-
+	fmt.Println("Xored Character : ", string(xorcharacter))
+	fmt.Println("Score : ", score)
 }

@@ -2,6 +2,7 @@ package challenges
 
 import (
 	"bufio"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"strings"
@@ -20,22 +21,16 @@ func Challenge4() {
 
 	score := 0
 
-	count := 0
-
+	finalWord := ""
 	for scanner.Scan() {
-		count++
 		input := scanner.Text()
 
-		//string to bytes
-
-		convbyte := []byte(input)
+		convbyte, err := hex.DecodeString(input)
 		if err != nil {
 			panic(err)
 		}
 
-		englishLetters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-		freqorder := "etaoinshrdlcumwfgypbvkjxqz"
+		freqorder := " etaoinshrdlcumwfgypbvkjxqz"
 		freqorderrev := ""
 		for i := len(freqorder) - 1; i >= 0; i-- {
 			freqorderrev += string(freqorder[i])
@@ -45,7 +40,7 @@ func Challenge4() {
 		//finalbyte := make([]byte, len(convbyte))
 		//xorcharacter := ""
 
-		for _, char := range englishLetters {
+		for char := byte(0); char < 255; char++ {
 			newbyte := make([]byte, len(convbyte))
 			for i := 0; i < len(convbyte); i++ {
 				newbyte[i] = convbyte[i] ^ byte(char)
@@ -54,7 +49,7 @@ func Challenge4() {
 			newscore := 0
 
 			for _, char := range newbyte {
-				if char > 64 && char < 127 || char > 96 && char < 123 {
+				if char > 64 && char < 127 || char > 96 && char < 123 || char == 32 {
 
 					position := strings.Index(freqorderrev, strings.ToLower(string(char)))
 					newscore += position
@@ -63,17 +58,13 @@ func Challenge4() {
 
 			if newscore >= score {
 				score = newscore
-				//finalbyte = newbyte
-				//xorcharacter = string(char)
-				fmt.Println("Decrypted String : ", string(newbyte))
-				fmt.Println("Score : ", score)
+				finalWord = string(newbyte)
 			}
 
 		}
-		//fmt.Println("Count : ", count)
-		//fmt.Println("line : ", input)
 
-		//fmt.Println("Xored Character : ", xorcharacter)
 	}
+	fmt.Println("Decrypted String : ", finalWord)
+	fmt.Println("Score : ", score)
 
 }
