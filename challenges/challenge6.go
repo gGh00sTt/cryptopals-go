@@ -10,7 +10,7 @@ import (
 
 func Challenge6() {
 
-	file, err := os.Open("challenge6.txt")
+	file, err := os.Open("challenges/challenge6.txt")
 
 	if err != nil {
 		panic(err)
