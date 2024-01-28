@@ -34,7 +34,7 @@ func Challenge10() {
 
 	fmt.Printf("ciphertext : %s \n", ciphertext)
 
-	plaintextafter := cbcdecrypt(ciphertext, key)
+	plaintextafter := Cbcdecrypt(ciphertext, key)
 
 	fmt.Printf("plaintext : %s \n", plaintextafter)
 
@@ -98,7 +98,7 @@ func addpadding(plaintextbyte []byte, keysize int) []byte {
 	return plaintextbyte
 }
 
-func cbcencrypt(plaintext string, key string) string {
+func Cbcencrypt(plaintext string, key string) string {
 	keybyte := []byte(key)
 	plaintextbyte := []byte(plaintext)
 
@@ -128,7 +128,7 @@ func cbcencrypt(plaintext string, key string) string {
 
 }
 
-func cbcdecrypt(ciphertext string, key string) string {
+func Cbcdecrypt(ciphertext string, key string) string {
 	keybyte := []byte(key)
 	ciphertextbyte := []byte(ciphertext)
 
@@ -150,6 +150,49 @@ func cbcdecrypt(ciphertext string, key string) string {
 		plaintextbyte = append(plaintextbyte, xoredblock...)
 
 		xorblock = ciphertextbyteblocks[i]
+	}
+
+	return string(plaintextbyte)
+
+}
+
+func Ecbencrypt(plaintext string, key string) string {
+	keybyte := []byte(key)
+	plaintextbyte := []byte(plaintext)
+
+	keysize := len(keybyte)
+
+	plaintextbyte = addpadding(plaintextbyte, keysize)
+
+	plaintextbyteblocks := createblocks(plaintextbyte, keysize)
+
+	ciphertextbyte := []byte{}
+	for i := 0; i < len(plaintextbyteblocks); i++ {
+
+		cipherblock := encryptAesBlock(keybyte, plaintextbyteblocks[i])
+
+		ciphertextbyte = append(ciphertextbyte, cipherblock...)
+
+	}
+
+	return string(ciphertextbyte)
+
+}
+
+func Ecbdecrypt(ciphertext string, key string) string {
+	keybyte := []byte(key)
+	ciphertextbyte := []byte(ciphertext)
+
+	keysize := len(keybyte)
+
+	ciphertextbyteblocks := createblocks(ciphertextbyte, keysize)
+
+	plaintextbyte := []byte{}
+	for i := 0; i < len(ciphertextbyteblocks); i++ {
+
+		plaintextblock := decryptAesBlock(keybyte, ciphertextbyteblocks[i])
+
+		plaintextbyte = append(plaintextbyte, plaintextblock...)
 	}
 
 	return string(plaintextbyte)
