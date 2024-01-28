@@ -15,7 +15,7 @@ func Challenge10() {
 
 	// ciphertext := cbcencrypt(plaintext, key)
 
-	file, err := os.Open("challenge9.txt")
+	file, err := os.Open("challenges/challenge10.txt")
 
 	if err != nil {
 		panic(err)
